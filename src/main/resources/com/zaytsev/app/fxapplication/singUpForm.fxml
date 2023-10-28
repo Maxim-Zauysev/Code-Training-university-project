@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zaytsev.app.fxapplication.Controllers.MainFormController">
+   <children>
+      <AnchorPane prefHeight="400.0" prefWidth="309.0" />
+      <AnchorPane prefHeight="400.0" prefWidth="475.0">
+         <children>
+            <Label layoutX="14.0" layoutY="127.0" prefHeight="31.0" prefWidth="106.0" text="Username">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label layoutX="14.0" layoutY="169.0" prefHeight="31.0" prefWidth="106.0" text="Password">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username" layoutX="117.0" layoutY="130.0" prefHeight="25.0" prefWidth="176.0" />
+            <TextField fx:id="password" layoutX="117.0" layoutY="172.0" prefHeight="25.0" prefWidth="176.0" />
+            <Button fx:id="singUpButton" layoutX="120.0" layoutY="209.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="176.0" text="SingUp" />
+            <Label layoutX="117.0" layoutY="254.0" prefHeight="31.0" prefWidth="149.0" text="Already a member?" />
+            <Button fx:id="logInButton" layoutX="229.0" layoutY="257.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="64.0" text="Log in" />
+         </children>
+      </AnchorPane>
+   </children>
+</HBox>

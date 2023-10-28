@@ -70,6 +70,7 @@ public class MainFormController implements Initializable {
                     userWindow.setEditable(false);
                     codeGenerated = false;
                     timeline.pause();
+                    startButton.setText("start");
 
                     double timeInSeconds = duration.toSeconds();
 
@@ -88,6 +89,7 @@ public class MainFormController implements Initializable {
                     codeGenerated = true;
                     userWindow.setEditable(true);
                     timeline.play();
+                    startButton.setText("stop");
                 }
             }
         });
