@@ -1,12 +1,24 @@
 package com.zaytsev.app.fxapplication.Controllers;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
+
+import com.zaytsev.app.fxapplication.CodeApplication;
+import com.zaytsev.app.fxapplication.data.DatabaseManager;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
-public class LoginController {
+public class LoginController implements Initializable {
 
     @FXML
     private ResourceBundle resources;
@@ -16,23 +28,56 @@ public class LoginController {
 
     @FXML
     private Button loginButton;
-
     @FXML
     private TextField password;
-
     @FXML
     private Button singUpButton;
-
     @FXML
     private TextField userName;
 
-    @FXML
-    void initialize() {
-        assert loginButton != null : "fx:id=\"loginButton\" was not injected: check your FXML file 'loginForm.fxml'.";
-        assert password != null : "fx:id=\"password\" was not injected: check your FXML file 'loginForm.fxml'.";
-        assert singUpButton != null : "fx:id=\"singUpButton\" was not injected: check your FXML file 'loginForm.fxml'.";
-        assert userName != null : "fx:id=\"userName\" was not injected: check your FXML file 'loginForm.fxml'.";
-
+    private final DatabaseManager databaseManager = new DatabaseManager();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        loginButton.setOnAction(this::onLoginButtonClick);
+        singUpButton.setOnAction(this::onSingUpButtonClick);
     }
+    @FXML
+    void onLoginButtonClick(ActionEvent event) {
+        String username = userName.getText();
+        String password = this.password.getText();
+        if (databaseManager.checkUser(username, password)) {
+            // переход на MainForm
+            try {
+                Parent root;
+                FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("mainForm.fxml"));
+                root = loader.load();
+                Stage stage = (Stage) loginButton.getScene().getWindow();
+                stage.setScene(new Scene(root));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            // вывод сообщения об ошибке
+            System.out.println("Invalid username or password");
+        }
+    }
+    @FXML
+    void onSingUpButtonClick(ActionEvent event) {
+        try {
+            Parent root;
+            FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("singUpForm.fxml"));
+            root = loader.load();
+            SingIUpController singIUpController = loader.getController();
+            Stage stage = (Stage) singUpButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
 }

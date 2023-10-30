@@ -4,6 +4,7 @@ module com.zaytsev.app.fxapplication {
     requires org.fxmisc.richtext;
     requires java.sql;
     requires org.flywaydb.core;
+    requires jbcrypt;
 
 
     opens com.zaytsev.app.fxapplication to javafx.fxml;
