@@ -75,4 +75,19 @@ public class DatabaseManager {
         }
         return false;
     }
+    public int getUserId(String username) {
+        String query = "SELECT id FROM users WHERE name = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 }

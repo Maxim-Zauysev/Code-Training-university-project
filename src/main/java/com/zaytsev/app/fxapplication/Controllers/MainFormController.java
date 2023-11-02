@@ -1,17 +1,23 @@
 package com.zaytsev.app.fxapplication.Controllers;
 
+import com.zaytsev.app.fxapplication.CodeApplication;
 import com.zaytsev.app.fxapplication.data.DatabaseManager;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -37,8 +43,13 @@ public class MainFormController implements Initializable {
     private Timeline timeline;
     private Duration duration;
     private boolean codeGenerated = false;
+    private Integer userId;
+    private void initData() {
+        System.out.println(userId);
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         // Загрузка языков из базы данных и добавление их в ComboBox
         List<String> languages = databaseManager.getLanguages();
         comboBox.getItems().addAll(languages);
@@ -55,6 +66,8 @@ public class MainFormController implements Initializable {
         );
         timeline.setCycleCount(Animation.INDEFINITE);
         duration = Duration.ZERO;
+
+        generateButton.setDisable(false);
 
         generateButton.setOnAction(event ->{
             if (comboBox.getValue() != null) {
@@ -84,17 +97,37 @@ public class MainFormController implements Initializable {
                     String userCode = userWindow.getText();
                     String referenceCode = codeWindow.getText();
                     compareCode(userCode, referenceCode);
+                    generateButton.setDisable(false);
+
+                    try {
+                        Parent root;
+                        FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("statisticForm.fxml"));
+                        root = loader.load();
+                        StatisticController statisticController = loader.getController();
+                        statisticController.setUserCode(userWindow.getText());
+                        statisticController.setGeneratedCode(codeWindow.getText());
+                        statisticController.setCountWords("Количество слов: " + wordCount);
+                        statisticController.setLeadTime("Ваше время: " + timeInSeconds);
+                        statisticController.setMatchPercentage(String.format("Совпадение: %.2f%%",  compareCode(userCode, referenceCode)));
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
                     duration = Duration.ZERO;
                     codeGenerated = true;
                     userWindow.setEditable(true);
                     timeline.play();
                     startButton.setText("stop");
+                    generateButton.setDisable(true);
                 }
             }
         });
     }
-    private void compareCode(String userCode, String referenceCode) {
+    private double compareCode(String userCode, String referenceCode) {
         // Простейший алгоритм Левенштейна
         int[][] dp = new int[userCode.length() + 1][referenceCode.length() + 1];
         for (int i = 0; i <= userCode.length(); i++) {
@@ -113,6 +146,7 @@ public class MainFormController implements Initializable {
 
         String message = String.format("Совпадение: %.2f%%", similarity);
         System.out.println(message); // Замените на свой способ вывода сообщения
+        return similarity;
     }
 
     private void updateTimer() {
@@ -140,5 +174,9 @@ public class MainFormController implements Initializable {
         }
     }
 
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+        initData();
+    }
 }
 

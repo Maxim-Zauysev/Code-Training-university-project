@@ -34,6 +34,7 @@ public class LoginController implements Initializable {
     private Button singUpButton;
     @FXML
     private TextField userName;
+    private Integer userId;
 
     private final DatabaseManager databaseManager = new DatabaseManager();
     @Override
@@ -46,11 +47,13 @@ public class LoginController implements Initializable {
         String username = userName.getText();
         String password = this.password.getText();
         if (databaseManager.checkUser(username, password)) {
-            // переход на MainForm
+            this.userId = databaseManager.getUserId(username);
             try {
                 Parent root;
                 FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("mainForm.fxml"));
                 root = loader.load();
+                MainFormController mainFormController = loader.getController();
+                mainFormController.setUserId(this.userId);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
                 stage.setScene(new Scene(root));
             } catch (IOException e) {
@@ -75,9 +78,11 @@ public class LoginController implements Initializable {
         }
     }
 
+    public Integer getUserId() {
+        return userId;
+    }
 
-
-
-
-
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }
