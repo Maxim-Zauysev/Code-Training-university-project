@@ -17,16 +17,9 @@
             <SplitPane dividerPositions="0.5" layoutX="6.0" layoutY="7.0" prefHeight="809.0" prefWidth="1266.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="0.0">
                <items>
 
-                  <TextArea fx:id="userWindow" prefHeight="807.0" prefWidth="524.0" wrapText="true" editable="true">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </TextArea>
-                  <TextArea fx:id="codeWindow" prefHeight="200.0" prefWidth="200.0" wrapText="true" editable="true">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </TextArea>
+                  <org.fxmisc.richtext.CodeArea fx:id="userWindow" id="userWindow" prefHeight="807.0" prefWidth="524.0" wrapText="true" editable="true" />
+                  <org.fxmisc.richtext.CodeArea fx:id="codeWindow" id="codeWindow" prefHeight="200.0" prefWidth="200.0" wrapText="true" editable="true" />
+
                </items>
             </SplitPane>
          </children>

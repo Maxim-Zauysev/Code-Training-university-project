@@ -1,0 +1,10 @@
+/* Для codeWindow */
+#codeWindow {
+    -fx-background-color: #808080; /* Серый фон */
+}
+
+
+/* Для userWindow */
+#userWindow {
+    -fx-background-color: #808080; /* Серый фон */
+}
