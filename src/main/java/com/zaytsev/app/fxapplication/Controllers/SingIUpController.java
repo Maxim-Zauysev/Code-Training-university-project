@@ -56,5 +56,22 @@ public class SingIUpController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         singUpButton.setOnAction(this::onSingUpButtonClick);
+        logInButton.setOnAction(this::handleLoginButtonAction);
+    }
+    @FXML
+    void handleLoginButtonAction(ActionEvent event) {
+        try {
+            Parent root;
+            FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("loginForm.fxml"));
+            root = loader.load();
+            LoginController loginController = loader.getController();
+
+
+            Stage stage = (Stage) logInButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Обработайте исключение, как считаете нужным
+        }
     }
 }

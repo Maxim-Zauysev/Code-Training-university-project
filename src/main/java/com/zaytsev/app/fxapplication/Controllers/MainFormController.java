@@ -21,6 +21,7 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -94,14 +95,11 @@ public class MainFormController implements Initializable {
                     timeline.pause();
                     startButton.setText("start");
 
-                    double timeInSeconds = duration.toSeconds();
+                    float timeInSeconds = (float) duration.toSeconds();
 
                     String userWindowText = userWindow.getText();
                     String[] words = userWindowText.split("\\s+"); // Разделите текст на слова
                     int wordCount = words.length;
-
-                    String message = "Ваше время: " + timeInSeconds + " секунд, количество слов: " + wordCount;
-                    System.out.println(message); // Выведите сообщение в консоль, вы можете использовать другой способ отображения
 
                     String userCode = userWindow.getText();
                     String referenceCode = codeWindow.getText();
@@ -118,6 +116,9 @@ public class MainFormController implements Initializable {
                         statisticController.setCountWords("Количество слов: " + wordCount);
                         statisticController.setLeadTime("Ваше время: " + timeInSeconds);
                         statisticController.setMatchPercentage(String.format("Совпадение: %.2f%%",  compareCode(userCode, referenceCode)));
+                        statisticController.compareAndHighlight();
+                        databaseManager.saveUserStatistics(userId, userWindow.getText(), codeWindow.getText(),
+                                                            timeInSeconds, wordCount , (float) compareCode(userCode, referenceCode),  LocalDateTime.now() );
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));
                         stage.show();
@@ -158,8 +159,6 @@ public class MainFormController implements Initializable {
         int maxMatch = dp[userCode.length()][referenceCode.length()];
         double similarity = (double) maxMatch / referenceCode.length() * 100.0;
 
-        String message = String.format("Совпадение: %.2f%%", similarity);
-        System.out.println(message); // Замените на свой способ вывода сообщения
         return similarity;
     }
 
