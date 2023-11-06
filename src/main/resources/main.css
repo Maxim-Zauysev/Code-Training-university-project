@@ -1,3 +1,6 @@
+.text {
+    -fx-fill: #ffffff; /* Белый цвет текста */
+}
 .root {
     -fx-font-size: 16px;
 }
@@ -10,23 +13,22 @@
 
 
 .paren {
-    -fx-fill: #000000;
+    -fx-fill: #ffffff;
 }
 
 .brace {
-    -fx-fill: #000000;
+    -fx-fill: #ffffff;
 }
-
 .bracket {
-    -fx-fill: #000000;
+    -fx-fill: #ffffff;
 }
 
 .semicolon {
-    -fx-fill: #000000;
+    -fx-fill: #ffffff;
 }
 
 .string {
-    -fx-fill: #2a00ff;
+    -fx-fill: #2fff00;
 }
 
 .comment {
@@ -61,3 +63,53 @@ AnchorPane {
 #generateButton, #startButton {
     -fx-text-fill: white; /* Белый цвет текста */
 }
+
+/*Setting to the light theme*/
+/*
+.root {
+    -fx-font-size: 16px;
+}
+.keyword {
+    -fx-fill: rgb(232, 149, 15);
+    -fx-font-weight: bold;
+}
+.paren {
+    -fx-fill: #000000;
+}
+.brace {
+    -fx-fill: #000000;
+}
+.bracket {
+    -fx-fill: #000000;
+}
+.semicolon {
+    -fx-fill: #000000;
+}
+.string {
+    -fx-fill: #2a00ff;
+}
+.comment {
+    -fx-fill: #3f7f5f;
+}
+#userWindow {
+    -fx-font-size: 16px;
+}
+#codeWindow {
+    -fx-font-size: 16px;
+}
+.code-window {
+    -fx-background-color: #808080;
+}
+.user-window {
+    -fx-background-color: #808080;
+}
+AnchorPane {
+    -fx-background-color: #1f1f1f;
+}
+#comboBox {
+    -fx-text-fill: white;
+}
+#generateButton, #startButton {
+    -fx-text-fill: white;
+}
+*/

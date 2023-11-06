@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 public class LoginController implements Initializable {
@@ -35,12 +36,35 @@ public class LoginController implements Initializable {
     @FXML
     private TextField userName;
     private Integer userId;
+    @FXML
+    private ToggleButton themeSwitcher;
 
     private final DatabaseManager databaseManager = new DatabaseManager();
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loginButton.setOnAction(this::onLoginButtonClick);
         singUpButton.setOnAction(this::onSingUpButtonClick);
+        themeSwitcher.setText("light");
+//        // Получение ссылки на Scene или любой компонент, который уже добавлен на сцену
+//        Scene scene = loginButton.getScene();
+//        // Добавление файла CSS к текущей сцене
+//        scene.getStylesheets().add(getClass().getResource("dark-theme.css").toExternalForm());
+
+        themeSwitcher.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                // Применяем темную тему
+                userName.getScene().getStylesheets().clear();
+                userName.getScene().getStylesheets().add(getClass().getResource("/dark-theme.css").toExternalForm());
+                themeSwitcher.setText("light");
+
+            } else {
+                // Применяем светлую тему
+                userName.getScene().getStylesheets().clear();
+                userName.getScene().getStylesheets().add(getClass().getResource("/light-theme.css").toExternalForm());
+                themeSwitcher.setText("dark");
+            }
+        });
+
     }
     @FXML
     void onLoginButtonClick(ActionEvent event) {
@@ -55,7 +79,10 @@ public class LoginController implements Initializable {
                 MainFormController mainFormController = loader.getController();
                 mainFormController.setUserId(this.userId);
                 Stage stage = (Stage) loginButton.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getResource("/mainDarkTheme.css").toExternalForm());
+
+                stage.setScene(scene);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,10 +99,16 @@ public class LoginController implements Initializable {
             root = loader.load();
             SingIUpController singIUpController = loader.getController();
             Stage stage = (Stage) singUpButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+
+            // Добавляем стиль к сцене
+            scene.getStylesheets().add(getClass().getResource("/darkSingUp.css").toExternalForm());
+
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public Integer getUserId() {

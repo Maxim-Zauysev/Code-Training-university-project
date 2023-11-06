@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,6 +30,11 @@ public class SingIUpController implements Initializable {
 
     @FXML
     private TextField username;
+
+    @FXML
+    private ToggleButton themeSwitcher;
+    private Scene scene; // Ссылка на сцену
+
 
     private final DatabaseManager databaseManager = new DatabaseManager();
     @FXML
@@ -51,24 +57,52 @@ public class SingIUpController implements Initializable {
             System.out.println("Registration failed");
         }
     }
-
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         singUpButton.setOnAction(this::onSingUpButtonClick);
         logInButton.setOnAction(this::handleLoginButtonAction);
+        scene = username.getScene();
+
+        // Добавляем слушателя к переключателю тем
+        themeSwitcher.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            switchTheme(newValue);
+        });
     }
+
+    // Метод для переключения темы
+    private void switchTheme(boolean darkTheme) {
+        // Удаляем предыдущую тему
+
+        themeSwitcher.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                // Применяем темную тему
+                singUpButton.getScene().getStylesheets().clear();
+                singUpButton.getScene().getStylesheets().add(getClass().getResource("/darkSingUp.css").toExternalForm());
+                themeSwitcher.setText("light");
+
+            } else {
+                // Применяем светлую тему
+                singUpButton.getScene().getStylesheets().clear();
+                singUpButton.getScene().getStylesheets().add(getClass().getResource("/lightSingUp.css").toExternalForm());
+                themeSwitcher.setText("dark");
+            }
+        });
+
+    }
+
     @FXML
     void handleLoginButtonAction(ActionEvent event) {
         try {
             Parent root;
             FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("loginForm.fxml"));
+
             root = loader.load();
             LoginController loginController = loader.getController();
 
-
             Stage stage = (Stage) logInButton.getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/dark-theme.css").toExternalForm());
+            stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
             // Обработайте исключение, как считаете нужным

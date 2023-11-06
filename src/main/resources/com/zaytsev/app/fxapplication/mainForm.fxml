@@ -30,6 +30,7 @@
             <Button fx:id="generateButton" layoutX="179.0" layoutY="2.0" mnemonicParsing="false" text="generate" />
             <Button fx:id="startButton" layoutX="257.0" layoutY="2.0" mnemonicParsing="false" text="start" />
             <Label fx:id="timerLabel" layoutX="320.0" layoutY="2.0" />
+
          </children>
       </AnchorPane>
    </children>

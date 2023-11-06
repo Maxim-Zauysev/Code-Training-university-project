@@ -1,0 +1,36 @@
+/* light-theme.css */
+
+.root {
+    -fx-background-color: #FFFFFF; /* Светлый фон для всего приложения */
+}
+
+.label {
+    -fx-text-fill: #000000; /* Темный цвет текста для всех надписей */
+}
+
+.text-field {
+    -fx-background-color: #f2f2f2; /* Чуть более темный фон для полей ввода для лучшей видимости */
+    -fx-text-fill: #000000; /* Темный цвет текста для полей ввода */
+    -fx-prompt-text-fill: #a0a0a0; /* Цвет placeholder текста */
+    -fx-border-color: #c0c0c0; /* Добавляем границу для полей ввода */
+    -fx-border-insets: -1; /* Делаем границу внутри компонента, чтобы не изменять размер */
+    -fx-border-radius: 4; /* Слегка скругляем углы границы */
+}
+
+.button, .toggle-button {
+    -fx-background-color: #e0e0e0; /* Светлый фон для кнопок */
+    -fx-text-fill: #000000; /* Темный цвет текста для кнопок */
+    -fx-border-color: #c0c0c0; /* Цвет границ для кнопок */
+}
+
+.button:hover, .toggle-button:hover {
+    -fx-background-color: #c8c8c8; /* Светлый фон для кнопок при наведении */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #dddddd; /* Светлый фон для активного состояния toggle-button */
+}
+
+.toggle-button:pressed {
+    -fx-background-color: #bababa; /* Светлый фон для toggle-button при нажатии */
+}

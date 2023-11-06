@@ -13,6 +13,7 @@ public class  CodeApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(CodeApplication.class.getResource("loginForm.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("code simulator");
+        scene.getStylesheets().add(getClass().getResource("/dark-theme.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
     }

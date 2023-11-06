@@ -1,0 +1,42 @@
+/* dark-theme.css */
+.root {
+    -fx-background-color: #202124; /* Основной фон для всего приложения */
+}
+
+.label {
+    -fx-text-fill: #E8EAED; /* Цвет текста для всех надписей */
+}
+
+.text-field {
+    -fx-background-color: #303134; /* Фоновый цвет для полей ввода */
+    -fx-text-fill: #E8EAED; /* Цвет текста для полей ввода */
+    -fx-prompt-text-fill: #60646B; /* Цвет placeholder текста */
+}
+
+.button {
+    -fx-background-color: #3C4043; /* Фоновый цвет для кнопок */
+    -fx-text-fill: #E8EAED; /* Цвет текста для кнопок */
+    -fx-border-color: #5F6368; /* Цвет границ для кнопок */
+}
+
+.button:hover {
+    -fx-background-color: #4C4F53; /* Фоновый цвет для кнопок при наведении */
+}
+.toggle-button {
+    -fx-background-color: #3C4043; /* Фоновый цвет для toggle-button такой же, как у loginButton */
+    -fx-text-fill: #E8EAED; /* Цвет текста для toggle-button такой же, как у loginButton */
+    -fx-border-color: #5F6368; /* Цвет границ для toggle-button такой же, как у loginButton */
+    -fx-background-radius: 4; /* Скругление углов для toggle-button (если нужно) */
+}
+
+.toggle-button:selected {
+    -fx-background-color: #202124; /* Затемненный фон для активного состояния toggle-button */
+}
+
+.toggle-button:hover {
+    -fx-background-color: #4C4F53; /* Фоновый цвет для toggle-button при наведении такой же, как у loginButton:hover */
+}
+
+.toggle-button:pressed {
+    -fx-background-color: #5F6368; /* Фоновый цвет для toggle-button при нажатии */
+}
