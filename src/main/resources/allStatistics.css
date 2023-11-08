@@ -1,0 +1,9 @@
+.match {
+    -fx-fill: green;
+    -fx-font-weight: bold;
+}
+
+.nomatch {
+    -fx-fill: red;
+    -fx-font-weight: bold;
+}

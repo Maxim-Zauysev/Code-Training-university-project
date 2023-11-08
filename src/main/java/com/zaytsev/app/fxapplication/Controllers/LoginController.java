@@ -26,7 +26,6 @@ public class LoginController implements Initializable {
 
     @FXML
     private URL location;
-
     @FXML
     private Button loginButton;
     @FXML
@@ -38,17 +37,13 @@ public class LoginController implements Initializable {
     private Integer userId;
     @FXML
     private ToggleButton themeSwitcher;
-
     private final DatabaseManager databaseManager = new DatabaseManager();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loginButton.setOnAction(this::onLoginButtonClick);
         singUpButton.setOnAction(this::onSingUpButtonClick);
         themeSwitcher.setText("light");
-//        // Получение ссылки на Scene или любой компонент, который уже добавлен на сцену
-//        Scene scene = loginButton.getScene();
-//        // Добавление файла CSS к текущей сцене
-//        scene.getStylesheets().add(getClass().getResource("dark-theme.css").toExternalForm());
 
         themeSwitcher.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
@@ -66,6 +61,7 @@ public class LoginController implements Initializable {
         });
 
     }
+
     @FXML
     void onLoginButtonClick(ActionEvent event) {
         String username = userName.getText();
@@ -91,6 +87,7 @@ public class LoginController implements Initializable {
             System.out.println("Invalid username or password");
         }
     }
+
     @FXML
     void onSingUpButtonClick(ActionEvent event) {
         try {

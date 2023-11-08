@@ -2,6 +2,7 @@ package com.zaytsev.app.fxapplication.Controllers;
 
 import com.zaytsev.app.fxapplication.CodeApplication;
 import com.zaytsev.app.fxapplication.data.DatabaseManager;
+import com.zaytsev.app.fxapplication.data.UserDto;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -50,7 +51,7 @@ public class MainFormController implements Initializable {
 
 
     private void initData() {
-        System.out.println(userId);
+
     }
 
     @Override
@@ -59,6 +60,9 @@ public class MainFormController implements Initializable {
         userWindow.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
 //        codeWindow.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 //        userWindow.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+
+        userWindow.clear();
+        codeWindow.clear();
 
         // Загрузка языков из базы данных и добавление их в ComboBox
         List<String> languages = databaseManager.getLanguages();
@@ -117,11 +121,17 @@ public class MainFormController implements Initializable {
                         statisticController.setLeadTime("Ваше время: " + timeInSeconds);
                         statisticController.setMatchPercentage(String.format("Совпадение: %.2f%%",  compareCode(userCode, referenceCode)));
                         statisticController.compareAndHighlight();
+                        statisticController.setUserCodeArea(userWindow);
+                        statisticController.setGeneratedCodeArea(codeWindow);
                         databaseManager.saveUserStatistics(userId, userWindow.getText(), codeWindow.getText(),
                                                             timeInSeconds, wordCount , (float) compareCode(userCode, referenceCode),  LocalDateTime.now() );
                         Stage stage = new Stage();
-                        stage.setScene(new Scene(root));
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(getClass().getResource("/mainDarkTheme.css").toExternalForm());
+                        stage.setScene(scene);
                         stage.show();
+
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -21,34 +21,36 @@ public class SingIUpController implements Initializable {
 
     @FXML
     private Button logInButton;
-
     @FXML
     private TextField password;
-
     @FXML
     private Button singUpButton;
-
     @FXML
     private TextField username;
-
     @FXML
     private ToggleButton themeSwitcher;
     private Scene scene; // Ссылка на сцену
-
+    private Integer userId;
 
     private final DatabaseManager databaseManager = new DatabaseManager();
+
     @FXML
     void onSingUpButtonClick(ActionEvent event) {
         String username = this.username.getText();
         String password = this.password.getText();
         if (databaseManager.registerUser(username, password)) {
-            // переход на MainForm
+            this.userId = databaseManager.getUserId(username);
             try {
                 Parent root;
                 FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("mainForm.fxml"));
                 root = loader.load();
+                MainFormController mainFormController = loader.getController();
+                mainFormController.setUserId(this.userId);
                 Stage stage = (Stage) singUpButton.getScene().getWindow();
-                stage.setScene(new Scene(root));
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getResource("/mainDarkTheme.css").toExternalForm());
+
+                stage.setScene(scene);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -57,6 +59,7 @@ public class SingIUpController implements Initializable {
             System.out.println("Registration failed");
         }
     }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         singUpButton.setOnAction(this::onSingUpButtonClick);

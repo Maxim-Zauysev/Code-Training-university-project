@@ -54,6 +54,8 @@ public class DatabaseManager {
     }
 
     public boolean registerUser(String username, String password) {
+        if(username.trim().isBlank() || password.trim().isBlank())
+            return false;
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         String query = "INSERT INTO users (name, password) VALUES (?, ?)";
         try (Connection conn = getConnection();
@@ -117,5 +119,58 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public int getCodeId(String code) {
+        String query = "SELECT id FROM code WHERE code = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, code);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public String getCodeById(int id) {
+        String query = "SELECT code FROM code WHERE id = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("code");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<UserDto> getUsersByGeneratedCode(String code) {
+        List<UserDto> users = new ArrayList<>();
+        String query = "SELECT u.name, us.user_code, us.generated_code " +
+                "FROM users_statistics us " +
+                "JOIN users u ON us.users_id = u.id " +
+                "WHERE us.generated_code = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, code);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UserDto userDto = new UserDto();
+                userDto.name = rs.getString("name");
+                userDto.userCode = rs.getString("user_code");
+                userDto.generatedCode = rs.getString("generated_code");
+                users.add(userDto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }
