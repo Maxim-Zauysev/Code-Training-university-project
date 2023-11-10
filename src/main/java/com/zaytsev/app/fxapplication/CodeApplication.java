@@ -3,6 +3,7 @@ package com.zaytsev.app.fxapplication;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -14,6 +15,8 @@ public class  CodeApplication extends Application {
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         stage.setTitle("code simulator");
         scene.getStylesheets().add(getClass().getResource("/dark-theme.css").toExternalForm());
+        stage.getIcons().add(new Image("/icon.jpg"));
+        stage.setTitle("Code Trenager");
         stage.setScene(scene);
         stage.show();
     }

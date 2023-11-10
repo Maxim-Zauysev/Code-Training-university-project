@@ -1,0 +1,106 @@
+.root {
+    -fx-background-color: #333;
+}
+
+.button {
+    -fx-background-color: #555;
+    -fx-text-fill: #DDD;
+    -fx-border-color: #666;
+}
+
+.label {
+    -fx-text-fill: #DDD;
+}
+
+.split-pane {
+    -fx-background-color: #333;
+    -fx-border-color: transparent;
+}
+
+.split-pane .split-pane-divider {
+    -fx-background-color: #444;
+}
+
+.combo-box {
+    -fx-background-color: #555;
+    -fx-mark-color: #DDD;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #555;
+    -fx-text-fill: #DDD;
+}
+
+.combo-box .list-cell:filled:selected, .combo-box .list-cell:filled:selected:hover {
+    -fx-background-color: #444;
+}
+
+.text-area, .text-field, .code-area {
+    -fx-background-color: #444;
+    -fx-text-fill: #DDD;
+    -fx-prompt-text-fill: #777;
+}
+
+/* Additional styling for the custom component 'CodeArea' might be required */
+.code-area {
+    -fx-background-color: #2B2B2B;
+    -fx-text-fill: #A9B7C6;
+}
+.split-pane, .split-pane-divider {
+    -fx-background-color: #333; /* Или другой цвет фона, соответствующий вашей теме */
+}
+
+/* Стили для VBox, чтобы убедиться, что фон под SplitPane тоже темный */
+.vbox, .content {
+    -fx-background-color: #333; /* Или другой цвет фона, соответствующий вашей теме */
+}
+
+/* Если у вас есть ScrollPane, также убедитесь, что его фон темный */
+.scroll-pane, .scroll-pane > .viewport {
+    -fx-background-color: #333; /* Или другой цвет фона, соответствующий вашей теме */
+}
+
+/* Убедитесь, что фон для всех Label темный, если они не находятся внутри SplitPane */
+.label {
+    -fx-background-color: #333; /* Или другой цвет фона, соответствующий вашей теме */
+    -fx-text-fill: #DDD;
+}
+.scroll-bar {
+    -fx-background-color: #333;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #555; /* Цвет ползунка скроллбара */
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #666; /* Цвет ползунка скроллбара при наведении */
+}
+
+.scroll-bar .track {
+    -fx-background-color: #444; /* Цвет дорожки скроллбара */
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: #333; /* Цвет кнопок управления скроллбара */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #DDD; /* Цвет стрелок скроллбара */
+}
+
+.scroll-bar .increment-arrow:hover,
+.scroll-bar .decrement-arrow:hover {
+    -fx-background-color: #BBB; /* Цвет стрелок скроллбара при наведении */
+}
+.match {
+    -fx-background-color: green;
+}
+
+.nomatch {
+    -fx-background-color: red;
+}

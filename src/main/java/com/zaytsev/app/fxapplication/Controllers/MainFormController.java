@@ -34,9 +34,13 @@ public class MainFormController implements Initializable {
     @FXML
     private ComboBox<String> comboBox;
     @FXML
+    private ComboBox<String> complexityComboBox;
+    @FXML
     private Button generateButton;
     @FXML
     private Button startButton;
+    @FXML
+    private Button myStatisticsButton;
     @FXML
     private CodeArea userWindow;
     private final DatabaseManager databaseManager = new DatabaseManager();
@@ -54,6 +58,13 @@ public class MainFormController implements Initializable {
 
     }
 
+/*
+   TODO:
+    Уровни сложности V
+    панель администратора X
+    Своя статистика V
+ */
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         codeWindow.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
@@ -67,6 +78,9 @@ public class MainFormController implements Initializable {
         // Загрузка языков из базы данных и добавление их в ComboBox
         List<String> languages = databaseManager.getLanguages();
         comboBox.getItems().addAll(languages);
+
+        List<String> complexityLevels = databaseManager.getComplexityLevels();
+        complexityComboBox.getItems().addAll(complexityLevels);
 
         codeWindow.setEditable(false);
         codeWindow.setWrapText(true);
@@ -88,6 +102,24 @@ public class MainFormController implements Initializable {
                 userWindow.clear();
                 generateCode();
                 codeGenerated = true;
+            }
+        });
+
+        myStatisticsButton.setOnAction(event -> {
+            try {
+                Parent root;
+                FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("myStatistics.fxml"));
+                root = loader.load();
+                MyStatisticsController statisticController = loader.getController();
+                statisticController.setUserStatistics(databaseManager.getUserStatistics(userId));
+                statisticController.generateAllStatistic(statisticController.getUserStatistics());
+                Stage stage = new Stage();
+                Scene scene = new Scene(root);
+                scene.getStylesheets().add(getClass().getResource("/myStatisticsDarkTheme.css").toExternalForm());
+                stage.setScene(scene);
+                stage.show();
+            }catch (Exception exception){
+                exception.printStackTrace();
             }
         });
 
@@ -152,6 +184,20 @@ public class MainFormController implements Initializable {
         });
     }
 
+    private void generateCode() {
+        String selectedLanguage = comboBox.getValue();
+        String selectedComplexity = complexityComboBox.getValue();
+
+        if (selectedLanguage != null && selectedComplexity != null) {
+            // Получение рандомного кода для выбранного языка и сложности и отображение его в codeWindow
+            String randomCode = databaseManager.getRandomCode(selectedLanguage, selectedComplexity);
+            codeWindow.replaceText(randomCode);
+            generatedCode = randomCode; // Сохраните сгенерированный код
+
+            // Вызов метода для обновления подсветки в codeWindow
+            updateHighlighting();
+        }
+    }
     private double compareCode(String userCode, String referenceCode) {
         // Простейший алгоритм Левенштейна
         int[][] dp = new int[userCode.length() + 1][referenceCode.length() + 1];
@@ -189,18 +235,7 @@ public class MainFormController implements Initializable {
 
     private String generatedCode = ""; // Добавьте поле для хранения сгенерированного кода
 
-    private void generateCode() {
-        String selectedLanguage = comboBox.getValue();
-        if (selectedLanguage != null) {
-            // Получение рандомного кода для выбранного языка и отображение его в codeWindow
-            String randomCode = databaseManager.getRandomCode(selectedLanguage);
-            codeWindow.replaceText(randomCode);
-            generatedCode = randomCode; // Сохраните сгенерированный код
 
-            // Вызов метода для обновления подсветки в codeWindow
-            updateHighlighting();
-        }
-    }
 
 
     public void setUserId(Integer userId) {
@@ -264,4 +299,6 @@ public class MainFormController implements Initializable {
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
     }
+
 }
+

@@ -60,7 +60,7 @@ AnchorPane {
 }
 
 /* Для кнопок (generateButton и startButton) */
-#generateButton, #startButton {
+#generateButton, #startButton, #myStatisticsButton {
     -fx-text-fill: white; /* Белый цвет текста */
 }
 

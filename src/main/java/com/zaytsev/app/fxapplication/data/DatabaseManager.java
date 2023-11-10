@@ -1,9 +1,5 @@
 package com.zaytsev.app.fxapplication.data;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,20 +34,7 @@ public class DatabaseManager {
         return languages;
     }
 
-    public String getRandomCode(String language) {
-        String code = "";
-        try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement("SELECT code FROM code WHERE language_id = (SELECT id FROM language WHERE name = ?) ORDER BY RANDOM() LIMIT 1")) {
-            statement.setString(1, language);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                code = resultSet.getString("code");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return code;
-    }
+
 
     public boolean registerUser(String username, String password) {
         if(username.trim().isBlank() || password.trim().isBlank())
@@ -136,6 +119,21 @@ public class DatabaseManager {
         return -1;
     }
 
+    public List<String> getComplexityLevels() {
+        List<String> complexities = new ArrayList<>();
+        String query = "SELECT complexity FROM complexity;";
+        try (Connection conn = this.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                complexities.add(rs.getString("complexity"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return complexities;
+    }
+
     public String getCodeById(int id) {
         String query = "SELECT code FROM code WHERE id = ?";
         try (Connection conn = getConnection();
@@ -172,5 +170,82 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public String getRandomCode(String language, String complexity) {
+        String randomCode = "";
+        String query = "SELECT c.code FROM code AS c " +
+                "JOIN language AS l ON c.language_id = l.id " +
+                "JOIN complexity AS comp ON c.complexity_id = comp.id " +
+                "WHERE l.name = ? AND comp.complexity = ? " +
+                "ORDER BY RANDOM() LIMIT 1;";
+
+        try (Connection conn = this.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, language);
+            pstmt.setString(2, complexity);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    randomCode = rs.getString("code");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return randomCode;
+    }
+
+    public String getComplexityNameByCodeId(int codeId) {
+        String complexityName = "";
+        String query = "SELECT comp.complexity FROM complexity AS comp " +
+                "JOIN code AS c ON comp.id = c.complexity_id " +
+                "WHERE c.id = ?;";
+
+        try (Connection conn = this.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, codeId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    complexityName = rs.getString("complexity");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return complexityName;
+    }
+
+    public List<UserStatisticsDto> getUserStatistics(int userId) {
+        List<UserStatisticsDto> statistics = new ArrayList<>();
+        String query = "SELECT us.user_code, us.generated_code, us.date_of_completion, us.lead_time, us.count_words, us.match_percentage, comp.complexity " +
+                "FROM users_statistics AS us " +
+                "JOIN code AS c ON us.generated_code = c.code " +
+                "JOIN complexity AS comp ON c.complexity_id = comp.id " +
+                "WHERE us.users_id = ?;";
+
+        try (Connection conn = this.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, userId);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    String userCode = rs.getString("user_code");
+                    String generatedCode = rs.getString("generated_code");
+                    LocalDateTime dateTesting = rs.getDate("date_of_completion").toLocalDate().atStartOfDay(); // Преобразование java.sql.Date в LocalDateTime
+                    Float leadTime = rs.getFloat("lead_time");
+                    Integer countWords = rs.getInt("count_words");
+                    Float matchPercentage = rs.getFloat("match_percentage");
+                    String codeComplexity = rs.getString("complexity"); // Получение сложности кода
+
+                    statistics.add(new UserStatisticsDto(userCode, generatedCode, dateTesting, leadTime, countWords, matchPercentage, codeComplexity));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return statistics;
     }
 }

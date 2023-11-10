@@ -1,31 +1,31 @@
 package com.zaytsev.app.fxapplication.Controllers;
 
+import com.zaytsev.app.fxapplication.data.DatabaseManager;
 import com.zaytsev.app.fxapplication.data.UserDto;
+import com.zaytsev.app.fxapplication.data.UserStatisticsDto;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class CompareController implements Initializable {
+public class MyStatisticsController {
+
     @FXML
-    private ScrollPane codeScrollPane; // Ссылка на ScrollPane в FXML
+    private ScrollPane codeScrollPane;
+
     @FXML
-    private VBox codeVBoxContainer; // Ссылка на VBox внутри ScrollPane в FXML
-    private List<UserDto> users; // Список пользователей с их кодами
-    public void generateAllStatistic(List<UserDto> users){
+    private VBox codeVBoxContainer;
+    private List<UserStatisticsDto> userStatistics; // Список пользователей с их кодами
+    private final DatabaseManager databaseManager = new DatabaseManager();
+    public void generateAllStatistic(List<UserStatisticsDto> users){
         // Итерация по списку пользователей и создание интерфейса для каждого
-        for (UserDto user : users) {
+        for (UserStatisticsDto user : users) {
             // Создаем TextArea для кода пользователя
             TextArea userCodeTextArea = new TextArea(user.getUserCode());
             userCodeTextArea.setPrefHeight(300);
@@ -41,16 +41,20 @@ public class CompareController implements Initializable {
             splitPane.setDividerPositions(0.5); // Устанавливаем разделитель пополам
 
             // Создаем Label для отображения имени пользователя или другой информации
-            Label userNameLabel = new Label("User: " + user.getName());
+
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             String formattedDateTime = now.format(formatter); // Преобразование текущего времени в строку с использованием форматтера
 
-            Label pudDate = new Label("Date of testing: " + formattedDateTime);
+            Label statistics = new Label("Date of testing: " + formattedDateTime +
+                                            "\ncount words: " + user.getCountWords() +
+                                            "\nlead time: " + user.getLeadTime() + " c" +
+                                            "\nmatch percentage: " + user.getMatchPercentage() + "%" +
+                                            "\ncomplexity: " + user.getCodeComplexity());
 
             // Добавляем Label и SplitPane в контейнер VBox
-            VBox containerVBox = new VBox(userNameLabel,pudDate, splitPane);
+            VBox containerVBox = new VBox(statistics, splitPane);
             containerVBox.setSpacing(10); // Устанавливаем интервал между элементами
 
             // Добавляем контейнер в codeVBoxContainer
@@ -61,26 +65,27 @@ public class CompareController implements Initializable {
         codeVBoxContainer.setFillWidth(true);
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
-    // Геттеры и сеттеры
     public ScrollPane getCodeScrollPane() {
         return codeScrollPane;
     }
+
     public void setCodeScrollPane(ScrollPane codeScrollPane) {
         this.codeScrollPane = codeScrollPane;
     }
+
     public VBox getCodeVBoxContainer() {
         return codeVBoxContainer;
     }
+
     public void setCodeVBoxContainer(VBox codeVBoxContainer) {
         this.codeVBoxContainer = codeVBoxContainer;
     }
-    public List<UserDto> getUsers() {
-        return users;
+
+    public List<UserStatisticsDto> getUserStatistics() {
+        return userStatistics;
     }
-    public void setUsers(List<UserDto> users) {
-        this.users = users; // Установка списка пользователей
+
+    public void setUserStatistics(List<UserStatisticsDto> userStatistics) {
+        this.userStatistics = userStatistics;
     }
 }
