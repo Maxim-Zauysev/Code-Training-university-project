@@ -1,4 +1,4 @@
-# Code Training README
+# Code Training 
 
 Code Training - это приложение для тренировки навыков быстрого набора кода. Оно предназначено для программистов всех уровней, желающих улучшить свою скорость и точность при написании кода.
 
@@ -32,5 +32,5 @@ Code Training - это приложение для тренировки навыков быстрого набора кода. Оно 
 3. Откройте проект в вашей среде разработки и настройте подключение к базе данных в классе DatabaseManager. 
 4. Запустите приложение.
 
-![Screenshot_10.png](..%2FScreenshot_10.png)
-![Screenshot_11.png](..%2FScreenshot_11.png)
+![Screenshot_10.png](src%2Fmain%2Fresources%2Fscreens%2FScreenshot_10.png)
+![Screenshot_11.png](src%2Fmain%2Fresources%2Fscreens%2FScreenshot_11.png)
