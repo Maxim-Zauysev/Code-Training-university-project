@@ -24,9 +24,10 @@
             <Button fx:id="generateButton" layoutX="179.0" layoutY="2.0" mnemonicParsing="false" text="generate" />
             <Button fx:id="startButton" layoutX="257.0" layoutY="2.0" mnemonicParsing="false" text="start" />
             <Label fx:id="timerLabel" layoutX="320.0" layoutY="2.0" />
-            <Button fx:id="myStatisticsButton" layoutX="1145.0" layoutY="4.0" mnemonicParsing="false" text="chek my statistic" />
-            <ComboBox fx:id="complexityComboBox" layoutX="982.0" layoutY="4.0" prefWidth="150.0" />
-            <Label layoutX="917.0" layoutY="8.0" text="complexity" />
+            <Button fx:id="myStatisticsButton" layoutX="1046.0" layoutY="2.0" mnemonicParsing="false" text="chek my statistic" />
+            <ComboBox fx:id="complexityComboBox" layoutX="883.0" layoutY="2.0" prefWidth="150.0" />
+            <Label layoutX="818.0" layoutY="6.0" text="complexity" />
+            <Button fx:id="adminPanelButton" layoutX="1159.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="admin panel" />
          </children>
       </AnchorPane>
    </children>

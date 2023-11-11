@@ -1,0 +1,61 @@
+.root {
+    -fx-background-color: #333;
+}
+
+.button {
+    -fx-background-color: #555;
+    -fx-text-fill: #DDD;
+    -fx-border-color: #666;
+}
+
+.label {
+    -fx-text-fill: #DDD;
+}
+
+.split-pane {
+    -fx-background-color: #333;
+    -fx-border-color: transparent;
+}
+
+.split-pane .split-pane-divider {
+    -fx-background-color: #444;
+}
+
+.combo-box {
+    -fx-background-color: #555;
+    -fx-mark-color: #DDD;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #555;
+    -fx-text-fill: #DDD;
+}
+
+.combo-box .list-cell:filled:selected, .combo-box .list-cell:filled:selected:hover {
+    -fx-background-color: #444;
+}
+
+.text-area, .text-field, .code-area {
+    -fx-background-color: #444;
+    -fx-text-fill: #DDD;
+    -fx-prompt-text-fill: #777;
+}
+
+/* Additional styling for the custom component 'CodeArea' might be required */
+.code-area {
+    -fx-background-color: #2B2B2B;
+    -fx-text-fill: #A9B7C6;
+}
+.combo-box {
+    -fx-background-color: #555;
+    -fx-mark-color: #DDD;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #555;
+    -fx-text-fill: #DDD;
+}
+
+.combo-box .list-cell:filled:selected, .combo-box .list-cell:filled:selected:hover {
+    -fx-background-color: #444;
+}

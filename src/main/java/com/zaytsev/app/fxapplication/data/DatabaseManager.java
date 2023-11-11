@@ -248,4 +248,62 @@ public class DatabaseManager {
         }
         return statistics;
     }
+
+    public int addLanguage(String languageName) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement("INSERT INTO language (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, languageName);
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating language failed, no rows affected.");
+            }
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating language failed, no ID obtained.");
+                }
+            }
+        }
+    }
+
+    public void addCode(int languageId, int complexityId, String codeText) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement("INSERT INTO code (language_id, complexity_id, code) VALUES (?, ?, ?)")) {
+            stmt.setInt(1, languageId);
+            stmt.setInt(2, complexityId);
+            stmt.setString(3, codeText);
+            stmt.executeUpdate();
+        }
+    }
+
+    public int getLanguageIdByName(String name) throws SQLException {
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement("SELECT id FROM language WHERE name = ?")) {
+            stmt.setString(1, name);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("id");
+                } else {
+                    throw new SQLException("Language not found");
+                }
+            }
+        }
+    }
+
+    public String getUserRoleById(int userId) throws SQLException {
+        String query = "SELECT role FROM users WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, userId);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getString("role");
+                } else {
+                    throw new SQLException("User not found");
+                }
+            }
+        }
+    }
+
 }

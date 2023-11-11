@@ -3,6 +3,7 @@ package com.zaytsev.app.fxapplication.Controllers;
 import com.zaytsev.app.fxapplication.CodeApplication;
 import com.zaytsev.app.fxapplication.data.DatabaseManager;
 import com.zaytsev.app.fxapplication.data.UserDto;
+import com.zaytsev.app.fxapplication.exceptions.AccessDeniedException;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -22,6 +23,7 @@ import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -42,9 +44,10 @@ public class MainFormController implements Initializable {
     @FXML
     private Button myStatisticsButton;
     @FXML
+    private Button adminPanelButton;
+    @FXML
     private CodeArea userWindow;
     private final DatabaseManager databaseManager = new DatabaseManager();
-
     @FXML
     private Label timerLabel;
     private Timeline timeline;
@@ -52,25 +55,10 @@ public class MainFormController implements Initializable {
     private boolean codeGenerated = false;
     private Integer userId;
 
-
-
-    private void initData() {
-
-    }
-
-/*
-   TODO:
-    Уровни сложности V
-    панель администратора X
-    Своя статистика V
- */
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         codeWindow.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
         userWindow.getStylesheets().add(getClass().getResource("/main.css").toExternalForm());
-//        codeWindow.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
-//        userWindow.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
         userWindow.clear();
         codeWindow.clear();
@@ -102,6 +90,38 @@ public class MainFormController implements Initializable {
                 userWindow.clear();
                 generateCode();
                 codeGenerated = true;
+            }
+        });
+
+        adminPanelButton.setOnAction(event -> {
+            try {
+                if (databaseManager.getUserRoleById(userId).equals("admin")) {
+                    try {
+                        Parent root;
+                        FXMLLoader loader = new FXMLLoader(CodeApplication.class.getResource("adminPanel.fxml"));
+                        root = loader.load();
+                        AdminPanelController adminPanelController = loader.getController();
+                        // Загрузка языков из базы данных и добавление их в ComboBox
+                        adminPanelController.getLanguageComboBox().getItems().addAll(databaseManager.getLanguages());
+                        adminPanelController.getComplexityComboBox().getItems().addAll(databaseManager.getComplexityLevels());
+
+                        Stage stage = new Stage();
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(getClass().getResource("/adminPanelTheme.css").toExternalForm());
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                } else {
+                    try {
+                        throw new AccessDeniedException("Access denied: user is not an admin.");
+                    } catch (AccessDeniedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         });
 
@@ -163,11 +183,9 @@ public class MainFormController implements Initializable {
                         stage.setScene(scene);
                         stage.show();
 
-
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                 } else {
                     duration = Duration.ZERO;
                     codeGenerated = true;
@@ -198,6 +216,7 @@ public class MainFormController implements Initializable {
             updateHighlighting();
         }
     }
+
     private double compareCode(String userCode, String referenceCode) {
         // Простейший алгоритм Левенштейна
         int[][] dp = new int[userCode.length() + 1][referenceCode.length() + 1];
@@ -235,12 +254,8 @@ public class MainFormController implements Initializable {
 
     private String generatedCode = ""; // Добавьте поле для хранения сгенерированного кода
 
-
-
-
     public void setUserId(Integer userId) {
         this.userId = userId;
-        initData();
     }
 
     private void updateHighlighting() {
@@ -278,7 +293,7 @@ public class MainFormController implements Initializable {
                     + "|(?<STRING>" + STRING_PATTERN + ")"
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
-    private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+    static StyleSpans<Collection<String>> computeHighlighting(String text) {
         Matcher matcher = PATTERN.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
